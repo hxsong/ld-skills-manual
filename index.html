@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM-Workflow 全栈产品助手 × LD Skill 家族 · 新人使用手册</title>
+<style>
+  :root{
+    --ink:#1a2233; --sub:#5a6478; --line:#e3e7ef; --bg:#f6f8fb; --card:#ffffff;
+    --blue:#2f6fed; --blue-soft:#eaf1fe; --teal:#0e9f8a; --teal-soft:#e3f5f2;
+    --orange:#e8830c; --orange-soft:#fdf0e0; --purple:#7a4fe0; --purple-soft:#f1ecfc;
+    --red:#d64545; --green:#2e9e5b; --gray-soft:#eef1f6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;font-size:15px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px 80px}
+  header.hero{background:linear-gradient(135deg,#1c2b4a 0%,#2f6fed 100%);color:#fff;padding:56px 24px 48px;text-align:center}
+  header.hero h1{font-size:30px;letter-spacing:1px;margin-bottom:12px}
+  header.hero p{opacity:.85;max-width:720px;margin:0 auto;font-size:15px}
+  header.hero .meta{margin-top:20px;font-size:12.5px;opacity:.7}
+  h2.sec{font-size:22px;margin:56px 0 8px;display:flex;align-items:center;gap:10px}
+  h2.sec .num{background:var(--blue);color:#fff;border-radius:8px;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;font-size:15px;flex:none}
+  p.sec-sub{color:var(--sub);margin-bottom:20px;font-size:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 1px 3px rgba(20,30,60,.05)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--gray-soft);font-weight:600;white-space:nowrap}
+  code{background:var(--gray-soft);border-radius:5px;padding:1px 6px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;color:#c7392b}
+  .tag{display:inline-block;border-radius:20px;padding:2px 12px;font-size:12px;font-weight:600;margin:2px 4px 2px 0}
+  .tag.trig{background:var(--blue-soft);color:var(--blue)}
+  .tag.dep{background:var(--gray-soft);color:var(--sub);font-weight:500}
+  .chip{display:inline-flex;align-items:center;gap:6px;background:var(--gray-soft);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:13px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:800px){.grid2,.grid4{grid-template-columns:1fr}}
+
+  /* 角色卡 */
+  .role-card{display:flex;gap:20px;align-items:flex-start}
+  .role-avatar{width:72px;height:72px;border-radius:16px;background:linear-gradient(135deg,#2f6fed,#7a4fe0);color:#fff;display:flex;align-items:center;justify-content:center;font-size:34px;flex:none}
+  .kv{display:flex;gap:8px;font-size:13.5px;margin-top:4px}
+  .kv b{color:var(--sub);font-weight:600;flex:none}
+
+  /* 流程图 */
+  .flow-svg{width:100%;height:auto;display:block}
+  .flow-note{font-size:12.5px;color:var(--sub);margin-top:10px}
+
+  /* pipeline 横向步骤条（HTML版） */
+  .steps{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:14px 0 4px}
+  .step{background:var(--gray-soft);border:1px solid var(--line);border-radius:9px;padding:8px 12px;font-size:12.5px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+  .step b{font-size:12px;color:var(--blue)}
+  .step .gate{color:var(--red);font-weight:700}
+  .arrow{align-self:center;color:#b6bdcb;font-size:16px;flex:none}
+  .io{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .io .box{border-radius:10px;padding:12px 14px;font-size:13px}
+  .io .in{background:var(--teal-soft);border:1px solid #bfe6df}
+  .io .out{background:var(--orange-soft);border:1px solid #f3d9b3}
+  .io .box h4{font-size:12.5px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+  .io .in h4{color:var(--teal)} .io .out h4{color:var(--orange)}
+
+  /* skill 卡片 */
+  details.skill{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:16px;overflow:hidden;box-shadow:0 1px 3px rgba(20,30,60,.05)}
+  details.skill>summary{list-style:none;cursor:pointer;padding:18px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  details.skill>summary::-webkit-details-marker{display:none}
+  details.skill[open]>summary{border-bottom:1px solid var(--line)}
+  .s-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;flex:none}
+  .s-title{flex:1;min-width:220px}
+  .s-title h3{font-size:16.5px}
+  .s-title .en{font-size:12.5px;color:var(--sub)}
+  .s-ver{font-size:12px;color:var(--sub);background:var(--gray-soft);border-radius:6px;padding:3px 8px}
+  .s-body{padding:18px 22px 22px}
+  .s-body p.desc{margin-bottom:10px}
+  .skill h4.mini{font-size:13px;color:var(--sub);margin:16px 0 4px;font-weight:600;text-transform:none}
+
+  /* 通用机制 */
+  .mech{border-left:4px solid var(--blue);background:var(--card);border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0 12px 12px 0;padding:16px 20px;margin-bottom:14px}
+  .mech b.t{display:block;margin-bottom:6px;font-size:14.5px}
+  .mech p{font-size:13.5px;color:#3a4459}
+
+  .start-list{counter-reset:s;list-style:none}
+  .start-list li{counter-increment:s;position:relative;padding:10px 0 10px 44px;border-bottom:1px dashed var(--line)}
+  .start-list li:last-child{border-bottom:none}
+  .start-list li::before{content:counter(s);position:absolute;left:0;top:10px;width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+  footer{text-align:center;color:var(--sub);font-size:12px;margin-top:60px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>全栈产品助手 × LD Skill 家族</h1>
+  <p>PM-Workflow 产品团队自动化工作流 · 新人使用手册</p>
+  <p class="meta">TAPD「领动产品需求管理」workspace 37902967 · 8 个 LD Skill · 版本截至 2026-09</p>
+</header>
+
+<div class="wrap">
+
+<!-- ============ 1 专家角色 ============ -->
+<h2 class="sec"><span class="num">1</span>当前专家角色</h2>
+<p class="sec-sub">本项目所有任务命令，优先由「全栈产品助手」根据意图路由到对应的 LD Skill 执行。</p>
+
+<div class="card role-card">
+  <div class="role-avatar">🧭</div>
+  <div style="flex:1">
+    <h3 style="margin-bottom:6px">全栈产品助手（product-avatar）</h3>
+    <p style="font-size:13.5px;color:var(--sub)">会话中选定的专家角色，是 LD Skill 家族的统一入口与编排者：理解用户意图 → 匹配触发词 → 调用对应 Skill → 遵守各 Skill 的硬门禁与单次确认流程。</p>
+    <div class="kv"><b>服务对象</b><span>6 人产品团队（PM + 设计师 + 需求分析员）</span></div>
+    <div class="kv"><b>核心平台</b><span>TAPD（需求中台）· 飞书知识库（PRD / 手册）· Cloudflare Pages（原型）· 企业微信 + 邮件（通知）</span></div>
+    <div class="kv"><b>工作原则</b><span>环境检查硬门禁 → AI 产出预览 → 用户确认 → 落库写回；凭证统一中心、一次配置永不重复问</span></div>
+    <div class="kv"><b>使用方式</b><span>自然语言 + 触发词即可，无需记命令。例：「帮我把这份需求录入 TAPD」「发布 PRD」「部署原型」「发送发布通知」</span></div>
+  </div>
+</div>
+
+<!-- ============ 2 全景流程 ============ -->
+<h2 class="sec"><span class="num">2</span>需求全生命周期全景流程</h2>
+<p class="sec-sub">8 个 Skill 串联「需求录入 → PRD → 原型 → 设计 → 手册 → 视频 → 发布通知」完整链路；PRD 发布前可选先经 LD-PRD-Reviewer 审查（红色分支路径）。</p>
+
+<div class="card">
+<svg class="flow-svg" viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,PingFang SC,sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8a93a6"/></marker>
+    <marker id="arRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#d64545"/></marker>
+  </defs>
+  <!-- 泳道背景 -->
+  <rect x="10" y="20" width="980" height="68" rx="10" fill="#eef1f6"/>
+  <text x="26" y="38" font-size="12" fill="#5a6478" font-weight="700">输入物（人工提供）</text>
+  <text x="26" y="52" font-size="11" fill="#8a93a6">团队各角色产出</text>
+  <rect x="10" y="104" width="980" height="176" rx="10" fill="#eaf1fe"/>
+  <text x="26" y="120" font-size="12" fill="#2f6fed" font-weight="700">LD Skill 处理（AI 自动化）</text>
+  <rect x="10" y="300" width="980" height="64" rx="10" fill="#e3f5f2"/>
+  <text x="26" y="318" font-size="12" fill="#0e9f8a" font-weight="700">输出物（落库产物 · 自动关联 TAPD）</text>
+
+  <!-- 输入行 -->
+  <g font-size="11.5" fill="#1a2233" text-anchor="middle">
+    <rect x="40"  y="58" width="118" height="28" rx="8" fill="#fff" stroke="#d7dce6"/><text x="99"  y="76">Word 需求背景</text>
+    <rect x="180" y="58" width="118" height="28" rx="8" fill="#fff" stroke="#d7dce6"/><text x="239" y="76">PRD Markdown</text>
+    <rect x="320" y="58" width="118" height="28" rx="8" fill="#fff" stroke="#d7dce6"/><text x="379" y="76">HTML 原型目录</text>
+    <rect x="460" y="58" width="118" height="28" rx="8" fill="#fff" stroke="#d7dce6"/><text x="519" y="76">Figma 设计稿链接</text>
+    <rect x="600" y="58" width="118" height="28" rx="8" fill="#fff" stroke="#d7dce6"/><text x="659" y="76">TAPD Story</text>
+    <rect x="740" y="58" width="118" height="28" rx="8" fill="#fff" stroke="#d7dce6"/><text x="799" y="76">飞书手册文档</text>
+    <rect x="880" y="58" width="100" height="28" rx="8" fill="#fff" stroke="#d7dce6"/><text x="930" y="76">Story 链接</text>
+  </g>
+
+  <!-- 可选分支：PRD-Reviewer（发布前审查） -->
+  <g text-anchor="middle">
+    <rect x="180" y="124" width="118" height="36" rx="9" fill="#fff" stroke="#d64545" stroke-width="2"/>
+    <text x="239" y="140" font-size="11.5" fill="#d64545" font-weight="700">PRD-Reviewer</text>
+    <text x="239" y="153" font-size="9" fill="#d64545">思考完成度审查 · 可选分支</text>
+    <rect x="252" y="118" width="44" height="13" rx="6.5" fill="#d64545"/><text x="274" y="128" font-size="8.5" fill="#fff" font-weight="700">可选</text>
+  </g>
+
+  <!-- Skill 行 -->
+  <g text-anchor="middle">
+    <rect x="40"  y="190" width="118" height="38" rx="10" fill="#2f6fed"/><text x="99"  y="208" font-size="11.5" fill="#fff" font-weight="700">TapdStory-Creator</text><text x="99"  y="222" font-size="9.5" fill="#cfe0fd">v1.4.0 建需求</text>
+    <rect x="180" y="190" width="118" height="38" rx="10" fill="#7a4fe0"/><text x="239" y="208" font-size="11.5" fill="#fff" font-weight="700">Prd-Publisher</text><text x="239" y="222" font-size="9.5" fill="#e4d9fa">v4.0.0 发PRD</text>
+    <rect x="320" y="190" width="118" height="38" rx="10" fill="#e8830c"/><text x="379" y="208" font-size="11.5" fill="#fff" font-weight="700">Prototype-Publisher</text><text x="379" y="222" font-size="9.5" fill="#fbe0bd">v2.2.0 发原型</text>
+    <rect x="460" y="190" width="118" height="38" rx="10" fill="#0e9f8a"/><text x="519" y="208" font-size="11.5" fill="#fff" font-weight="700">Figma-Linker</text><text x="519" y="222" font-size="9.5" fill="#c6ece5">v1.2.0 联设计</text>
+    <rect x="600" y="190" width="118" height="38" rx="10" fill="#2e9e5b"/><text x="659" y="208" font-size="11.5" fill="#fff" font-weight="700">Manual-Publisher</text><text x="659" y="222" font-size="9.5" fill="#c9ecd5">v1.5.3 发手册</text>
+    <rect x="740" y="190" width="118" height="38" rx="10" fill="#d64545"/><text x="799" y="208" font-size="11.5" fill="#fff" font-weight="700">Video-Generator</text><text x="799" y="222" font-size="9.5" fill="#f6c9c9">v1.0.0 生成视频</text>
+    <rect x="880" y="190" width="100" height="38" rx="10" fill="#3b4a66"/><text x="930" y="208" font-size="11.5" fill="#fff" font-weight="700">Release-Notifier</text><text x="930" y="222" font-size="9.5" fill="#c3cbd9">v1.5.1 通知</text>
+  </g>
+
+  <!-- 输出行 -->
+  <g font-size="11.5" fill="#1a2233" text-anchor="middle">
+    <rect x="40"  y="324" width="118" height="28" rx="8" fill="#fff" stroke="#9fd8cd"/><text x="99"  y="342">TAPD Story</text>
+    <rect x="180" y="324" width="118" height="28" rx="8" fill="#fff" stroke="#9fd8cd"/><text x="239" y="342">飞书 PRD 文档</text>
+    <rect x="320" y="324" width="118" height="28" rx="8" fill="#fff" stroke="#9fd8cd"/><text x="379" y="342">*.pages.dev 原型</text>
+    <rect x="460" y="324" width="118" height="28" rx="8" fill="#fff" stroke="#9fd8cd"/><text x="519" y="342">设计字段已关联</text>
+    <rect x="600" y="324" width="118" height="28" rx="8" fill="#fff" stroke="#9fd8cd"/><text x="659" y="342">产品使用手册</text>
+    <rect x="740" y="324" width="118" height="28" rx="8" fill="#fff" stroke="#9fd8cd"/><text x="799" y="342">1080p MP4 演示</text>
+    <rect x="880" y="324" width="100" height="28" rx="8" fill="#fff" stroke="#9fd8cd"/><text x="930" y="342">企微卡片+邮件</text>
+  </g>
+
+  <!-- 连线：输入→Skill -->
+  <g stroke="#8a93a6" stroke-width="1.4" marker-end="url(#ar)">
+    <line x1="99"  y1="86" x2="99"  y2="188"/>
+    <line x1="379" y1="86" x2="379" y2="188"/><line x1="519" y1="86" x2="519" y2="188"/>
+    <line x1="659" y1="86" x2="659" y2="188"/><line x1="799" y1="86" x2="799" y2="188"/>
+    <line x1="930" y1="86" x2="930" y2="188"/>
+  </g>
+
+  <!-- PRD 列分支：junction 分流为「直接发布」/「先审查」两条实线路径 -->
+  <circle cx="239" cy="100" r="3.2" fill="#8a93a6"/>
+  <!-- 分支A（可选）：先经 PRD-Reviewer 审查，通过后再发布 -->
+  <polyline points="239,86 239,121" fill="none" stroke="#d64545" stroke-width="1.8" marker-end="url(#arRed)"/>
+  <text x="233" y="112" font-size="10" fill="#d64545" font-weight="700" text-anchor="end">可选：先审查</text>
+  <line x1="239" y1="160" x2="239" y2="187" stroke="#d64545" stroke-width="1.8" marker-end="url(#arRed)"/>
+  <text x="239" y="176" font-size="9.5" fill="#d64545" text-anchor="middle">审查通过后发布</text>
+  <!-- 分支B（主路径）：跳过审查直接发布 -->
+  <polyline points="239,100 310,100 310,172 301,172" fill="none" stroke="#8a93a6" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="270" y="95" font-size="10" fill="#5a6478" text-anchor="middle">直接发布</text>
+
+  <!-- 连线：Skill→输出 -->
+  <g stroke="#8a93a6" stroke-width="1.4" marker-end="url(#ar)">
+    <line x1="99"  y1="228" x2="99"  y2="322"/><line x1="239" y1="228" x2="239" y2="322"/>
+    <line x1="379" y1="228" x2="379" y2="322"/><line x1="519" y1="228" x2="519" y2="322"/>
+    <line x1="659" y1="228" x2="659" y2="322"/><line x1="799" y1="228" x2="799" y2="322"/>
+    <line x1="930" y1="228" x2="930" y2="322"/>
+  </g>
+  <!-- 链路箭头（Skill之间） -->
+  <g stroke="#b6bdcb" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ar)">
+    <line x1="160" y1="209" x2="178" y2="209"/><line x1="300" y1="209" x2="318" y2="209"/>
+    <line x1="440" y1="209" x2="458" y2="209"/><line x1="580" y1="209" x2="598" y2="209"/>
+    <line x1="720" y1="209" x2="738" y2="209"/><line x1="860" y1="209" x2="878" y2="209"/>
+  </g>
+</svg>
+<p class="flow-note">说明：① 录入需求后，PM 编写 PRD —— 发布前有两条路径可选：<b style="color:#d64545">红色分支</b>先经 <b>LD-PRD-Reviewer</b> 做思考完成度审查、通过后再发布，<b>灰色主路径</b>可跳过审查直接发布；② 发布 PRD 后先部署原型、再关联 Figma 设计稿；③ PRD/原型/设计/手册四类关联行统一写入 TAPD 需求描述的「六、补充信息」关联产物表；④ 所有 Skill 共享统一凭证中心，首次配置后全家族通用。</p>
+</div>
+
+<!-- ============ 3 通用机制 ============ -->
+<h2 class="sec"><span class="num">3</span>LD 家族通用机制（新人必读）</h2>
+<p class="sec-sub">所有 Skill 共享的四条铁律，理解了它们就理解了 LD 家族一半的设计。</p>
+
+<div class="mech">
+  <b class="t">🔐 统一凭证中心</b>
+  <p>所有凭证集中存放在 <code>~/.workbuddy/config/_ld_shared/credentials.json</code>（权限 0600），由 <code>ld_credentials.py</code> 统一读写。探测链：环境变量 → 凭证中心 → 旧 config → rc 文件。<b>首次配置一次，全部 Skill 永久复用</b>，之后不会被重复询问。</p>
+</div>
+<div class="mech" style="border-left-color:var(--red)">
+  <b class="t">🚧 硬门禁（Hard Gate）</b>
+  <p>每个 Skill 的第一步都是环境检查（check）：TAPD 令牌、飞书授权、机器人凭证等。<b>check 不通过 → 立即终止，禁止任何后续写操作</b>；授权过期时脚本会自动发起授权流程，只需点击/扫码确认。飞书授权过期会给出 AUTH_URL + 二维码图片。</p>
+</div>
+<div class="mech" style="border-left-color:var(--teal)">
+  <b class="t">👀 单次确认门禁</b>
+  <p>AI 的产出（Story 字段、手册内容、FEATURE 卡片等）<b>必须先展示预览，用户确认后才落库</b>。预览即所见即所得——例如建 Story 时展示的 <code>description.html</code> 与最终落库内容完全一致。</p>
+</div>
+<div class="mech" style="border-left-color:var(--orange)">
+  <b class="t">🗂 关联产物表（单一事实来源）</b>
+  <p>TAPD 需求描述采用六段式模板，第「六、补充信息」节承载统一关联产物表：PRD / 原型 / 设计 / 手册 / 视频各占一行、互不覆盖。所有写表 Skill 共享防呆约束（行内插入、禁止游离行、禁止嵌套双 tr）。Release-Notifier 提取关联产物时也只读 Story 自定义字段，不从描述二次解析。</p>
+</div>
+
+<!-- ============ 4 Skill 明细 ============ -->
+<h2 class="sec"><span class="num">4</span>八个 LD Skill 能力明细</h2>
+<p class="sec-sub">按需求生命周期顺序排列。点击卡片展开：能力介绍、触发词、流程步骤、输入物 / 输出物。</p>
+
+<!-- 1 TapdStory-Creator -->
+<details class="skill" open>
+  <summary>
+    <div class="s-icon" style="background:var(--blue-soft)">📝</div>
+    <div class="s-title"><h3>LD-TapdStory-Creator · TAPD 需求自动创建</h3><div class="en">链路起点：Word 需求背景文档 → TAPD 需求单</div></div>
+    <span class="s-ver">v1.4.0</span>
+  </summary>
+  <div class="s-body">
+    <p class="desc">根据需求分析员提交的 Word 需求背景文档，AI 自动推理字段并匹配父需求（Feature），在 TAPD 创建 Story（Feature 的子需求）。图文混排描述按原 Word 顺序还原，创建前防重复检查。</p>
+    <div><span class="tag trig">创建需求</span><span class="tag trig">新建 Story</span><span class="tag trig">帮我建个 TAPD 需求</span><span class="tag trig">录入需求</span><span class="tag dep">依赖：tapd · python-docx</span></div>
+    <h4 class="mini">流程步骤</h4>
+    <div class="steps">
+      <div class="step"><b>Step 0</b>首次配置 TAPD 令牌（一次）</div><span class="arrow">→</span>
+      <div class="step"><b class="gate">Step 1 硬门禁</b>验证 TAPD 连接 / 点选项目</div><span class="arrow">→</span>
+      <div class="step"><b>Step 2</b>获取字段候选值 + Feature 列表</div><span class="arrow">→</span>
+      <div class="step"><b>Step 3–5</b>解析 Word → 上传图片 → 组装图文混排描述</div><span class="arrow">→</span>
+      <div class="step"><b>Step 6</b>AI 推理：标题 / 下拉字段（中文优先级）/ 父需求</div><span class="arrow">→</span>
+      <div class="step"><b>Step 7</b>Markdown 表格确认 + description.html 预览</div><span class="arrow">→</span>
+      <div class="step"><b>Step 8</b>创建 Story（同名防重复）</div>
+    </div>
+    <div class="io">
+      <div class="box in"><h4>📥 输入物</h4>Word 需求背景文档（.docx，图文混排）；首次需提供 TAPD 个人访问令牌</div>
+      <div class="box out"><h4>📤 输出物</h4>TAPD Story（Feature 子需求，含图文混排描述、图片已上传、字段动态探测取值）</div>
+    </div>
+  </div>
+</details>
+
+<!-- 2 PRD-Reviewer -->
+<details class="skill">
+  <summary>
+    <div class="s-icon" style="background:#fdecec">🔍</div>
+    <div class="s-title"><h3>LD-PRD-Reviewer · PRD 思考完成度审查</h3><div class="en">质量门禁：审「思考」而非「文档瑕疵」，发布 PRD 前的镜子</div></div>
+    <span class="s-ver">v2.0.0</span>
+  </summary>
+  <div class="s-body">
+    <p class="desc">PM 出完 PRD 之后、进评审之前的思考质量门禁。按六层思考框架（目标与价值 / 用户与场景 / 流程与方案 / 执行与数据 / 历史与兼容 / 异常与边界）判定思考覆盖与深度，输出非交互式报告。审查对象是 PM 的思考而非文档本身——简陋文档 = 思考痕迹少 = 必答题更多。<b>纯只读：不修改 PRD、不接 TAPD、无交互追问、不代答。</b></p>
+    <div><span class="tag trig">审查 PRD</span><span class="tag trig">PRD 审查</span><span class="tag trig">review PRD</span><span class="tag trig">检查 PRD</span><span class="tag dep">依赖：无（纯对话流程）</span></div>
+    <h4 class="mini">流程步骤</h4>
+    <div class="steps">
+      <div class="step"><b>Step 1</b>通读 PRD 全文，建立功能画像（长文分段读完）</div><span class="arrow">→</span>
+      <div class="step"><b>Step 2</b>六层思考逐层判定：未思考 / 浅 / 已想清 + 证据</div><span class="arrow">→</span>
+      <div class="step"><b>Step 3</b>输出报告写入 PRD 同目录 <code>reviews/</code></div>
+    </div>
+    <div class="io">
+      <div class="box in"><h4>📥 输入物</h4>PRD 文件路径（<b>只吃文件</b>，只给 Story 链接会被要求先提供文件）</div>
+      <div class="box out"><h4>📤 输出物</h4>思考完成度报告（.md）：总评 + 六层覆盖地图评分 + ≤5 个必答题（按后果排序）+ ≤5 条细节待办 + 结论</div>
+    </div>
+  </div>
+</details>
+
+<!-- 3 Prd-Publisher -->
+<details class="skill">
+  <summary>
+    <div class="s-icon" style="background:var(--purple-soft)">📄</div>
+    <div class="s-title"><h3>LD-Prd-Publisher · PRD 发布器</h3><div class="en">PRD Markdown → 飞书知识库在线文档 + TAPD 关联</div></div>
+    <span class="s-ver">v4.0.0</span>
+  </summary>
+  <div class="s-body">
+    <p class="desc">将 PRD Markdown 通过 drive +import 发布为飞书知识库在线文档（飞书自行渲染格式），发布后自动关联 TAPD 需求（含「六、补充信息」关联行）。已发布文档支持内容<b>原地更新</b>（update-doc，docx token 不变）与<b>标题改名</b>（rename，双侧同步）。知识空间固定为「产品需求文档库」，不允许自动创建空间或父节点。</p>
+    <div><span class="tag trig">发布 PRD</span><span class="tag trig">提交 PRD</span><span class="tag trig">更新 PRD</span><span class="tag trig">PRD 改名</span><span class="tag dep">依赖：tapd · lark-unified</span></div>
+    <h4 class="mini">流程步骤（新发布 6 步）</h4>
+    <div class="steps">
+      <div class="step"><b class="gate">Step 1 硬门禁</b>check --all 飞书 + TAPD 一次验完（过期自动发起扫码授权）</div><span class="arrow">→</span>
+      <div class="step"><b>Step 2</b>一次交互确认：文档标题 + 父节点</div><span class="arrow">→</span>
+      <div class="step"><b>Step 3</b>publish 发布到飞书</div><span class="arrow">→</span>
+      <div class="step"><b>Step 4</b>展示 DOC_URL → 用户确认</div><span class="arrow">→</span>
+      <div class="step"><b>Step 5</b>link 关联 TAPD + 六段式描述</div>
+    </div>
+    <div class="io">
+      <div class="box in"><h4>📥 输入物</h4>PRD Markdown 文件；确认标题与父节点（一级节点点选）</div>
+      <div class="box out"><h4>📤 输出物</h4>飞书知识库在线文档 URL；TAPD 需求 PRD 字段 + 描述关联行；后续可 update-doc / rename 迭代</div>
+    </div>
+  </div>
+</details>
+
+<!-- 4 Prototype-Publisher -->
+<details class="skill">
+  <summary>
+    <div class="s-icon" style="background:var(--orange-soft)">🖼</div>
+    <div class="s-title"><h3>LD-Prototype-Publisher · 原型发布器</h3><div class="en">HTML 原型目录 → Cloudflare Pages 永久域名 + TAPD 关联</div></div>
+    <span class="s-ver">v2.2.0</span>
+  </summary>
+  <div class="s-body">
+    <p class="desc">将 HTML 原型目录部署到 Cloudflare Pages，返回<b>永久生产域名</b> <code>https://{project}.pages.dev</code>（无时间签名，可长期分享），并自动关联 TAPD：更新「原型」自定义字段、填充描述「四、功能原型设计」节、并入关联产物表原型行。强制重新生成规范导航页（临时暂存目录，源目录零改动），多页面自动串联，链接一律新标签页打开。</p>
+    <div><span class="tag trig">部署原型</span><span class="tag trig">发布原型</span><span class="tag trig">提交原型</span><span class="tag dep">依赖：tapd · wrangler（skill 内自带安装）</span></div>
+    <h4 class="mini">流程步骤</h4>
+    <div class="steps">
+      <div class="step"><b>Step 0</b>确认目录 + 校验含 .html 文件</div><span class="arrow">→</span>
+      <div class="step"><b>Step 0.5</b>首次安装 wrangler（非沙箱模式）</div><span class="arrow">→</span>
+      <div class="step"><b class="gate">Step 1 硬门禁</b>环境检查</div><span class="arrow">→</span>
+      <div class="step"><b>Step 2</b>部署（生成导航页 + 推送 Pages）</div><span class="arrow">→</span>
+      <div class="step"><b>Step 3</b>用户确认部署结果</div><span class="arrow">→</span>
+      <div class="step"><b>Step 4–5</b>探测原型字段 → 更新 TAPD</div><span class="arrow">→</span>
+      <div class="step"><b>Step 6</b>输出汇总</div>
+    </div>
+    <div class="io">
+      <div class="box in"><h4>📥 输入物</h4>HTML 原型目录路径（至少含 1 个 .html）；首次需 Cloudflare 凭证</div>
+      <div class="box out"><h4>📤 输出物</h4>永久生产 URL（https://{project}.pages.dev）；TAPD 原型字段 + 描述「四」节 + 关联行</div>
+    </div>
+  </div>
+</details>
+
+<!-- 5 Figma-Linker -->
+<details class="skill">
+  <summary>
+    <div class="s-icon" style="background:var(--teal-soft)">🎨</div>
+    <div class="s-title"><h3>LD-Figma-Linker · Figma 设计稿链接器</h3><div class="en">设计稿链接 → TAPD「设计」字段 + 关联产物表</div></div>
+    <span class="s-ver">v1.2.0</span>
+  </summary>
+  <div class="s-body">
+    <p class="desc">将设计师的 Figma 设计稿链接关联到 TAPD 需求的「设计」字段，并在描述「六、补充信息」节并入设计关联行（与 PRD / 原型行共存）。带 URL 格式校验、写入前自动备份、dry-run 预览、幂等重跑。「设计」字段通过 <code>detect-field</code> 动态探测，不硬编码字段名。</p>
+    <div><span class="tag trig">关联 Figma</span><span class="tag trig">链接设计稿</span><span class="tag trig">提交设计</span><span class="tag trig">绑定设计稿</span><span class="tag dep">依赖：tapd（FIGMA_API_KEY 可选增强）</span></div>
+    <h4 class="mini">流程步骤（主路径 3 步）</h4>
+    <div class="steps">
+      <div class="step"><b>Step 0</b>收集 Figma 链接 + TAPD 需求链接</div><span class="arrow">→</span>
+      <div class="step"><b>Step 1</b>preview 一条命令返回真实数据，生成确认表</div><span class="arrow">→</span>
+      <div class="step"><b>Step 2</b>update 写入（备份 + dry-run + 幂等）</div>
+    </div>
+    <div class="io">
+      <div class="box in"><h4>📥 输入物</h4>Figma 设计稿链接（保留 node-id 参数）+ TAPD 需求链接</div>
+      <div class="box out"><h4>📤 输出物</h4>TAPD「设计」字段已填 + 描述「六、补充信息」设计关联行；本地 backups/ 备份</div>
+    </div>
+  </div>
+</details>
+
+<!-- 6 Manual-Publisher -->
+<details class="skill">
+  <summary>
+    <div class="s-icon" style="background:#e6f4ea">📘</div>
+    <div class="s-title"><h3>LD-Manual-Publisher · 产品使用手册发布器</h3><div class="en">TAPD Story（PRD+设计稿）→ 飞书知识库产品手册（章节级 upsert）</div></div>
+    <span class="s-ver">v1.5.3</span>
+  </summary>
+  <div class="s-body">
+    <p class="desc">核心模型：<b>每个产品 = 1 篇手册文档；每个 Story = 文档里的 1 个功能章节</b>。解析 Story 的 PRD 标题 <code>PRD｜{产品}｜{功能}</code>，定位「{产品} 使用手册」：不存在则 CREATE 整篇新建，已存在则 UPDATE 章节级 upsert（版本号自动 +0.1）。PRD 为唯一内容源（fetch-prd），标准四节模板（功能概述 / 使用场景 / 操作指南 / FAQ）；设计稿图片按锚点清单定位插入对应章节（插入失败自动回读校验，杜绝半成品）。发布至飞书知识库「领动产品使用手册」，必须挂父节点。</p>
+    <div><span class="tag trig">发布手册</span><span class="tag trig">生成手册</span><span class="tag trig">更新手册</span><span class="tag trig">创建使用手册</span><span class="tag dep">依赖：tapd · lark-unified</span></div>
+    <h4 class="mini">流程步骤</h4>
+    <div class="steps">
+      <div class="step"><b>Step 0–1</b>收集 Story URL → check 硬门禁</div><span class="arrow">→</span>
+      <div class="step"><b>Step 2</b>获取 Story 数据 + 探测 CREATE / UPDATE 模式</div><span class="arrow">→</span>
+      <div class="step"><b>Step 2.5/2.6</b>确认目标手册 / 父节点</div><span class="arrow">→</span>
+      <div class="step"><b>Step 3–3.5</b>fetch-prd 取内容源 + 决定图片锚点嵌入清单</div><span class="arrow">→</span>
+      <div class="step"><b>Step 4/7</b>AI 生成手册内容 → 预览确认</div><span class="arrow">→</span>
+      <div class="step"><b>Step 5/8</b>发布（CREATE 新建 / UPDATE 章节级 upsert + 插图）</div><span class="arrow">→</span>
+      <div class="step"><b>Step 9</b>输出汇总 + 回写 TAPD 手册关联行</div>
+    </div>
+    <div class="io">
+      <div class="box in"><h4>📥 输入物</h4>TAPD Story URL（PRD 必须已发布且可读）；Story 含设计链接时必须提取设计稿图片</div>
+      <div class="box out"><h4>📤 输出物</h4>飞书知识库「{产品} 使用手册」（新建或章节级更新，含截图）；TAPD「手册」关联行（指向产品手册整篇）；本地 embed_manifest + 备份</div>
+    </div>
+  </div>
+</details>
+
+<!-- 7 Video-Generator -->
+<details class="skill">
+  <summary>
+    <div class="s-icon" style="background:#fdecec">🎬</div>
+    <div class="s-title"><h3>LD-Video-Generator · 产品演示视频生成器</h3><div class="en">飞书手册文档 / 产品 URL → 1080p 配音演示视频</div></div>
+    <span class="s-ver">v1.0.0</span>
+  </summary>
+  <div class="s-body">
+    <p class="desc">PM 工作流最后一环：把「飞书文档（文字 + UI 截图）」自动变成产品操作演示视频。输出 1920×1080 MP4，含 Edge TTS 中文配音、逐词时间轴字幕、操作聚焦动效（focus 矩形镜头放大）、片头（按产品名）+ 片尾 + BGM。风格全部固化在 <code>config/style_profile.json</code>，Agent 只产出分镜内容不做样式决策；任一幕缺图则跳过该幕，绝不伪造。</p>
+    <div><span class="tag trig">生成演示视频</span><span class="tag trig">操作演示</span><span class="tag trig">产品演示视频</span><span class="tag trig">使用说明视频</span><span class="tag dep">依赖：lark-cli（复用飞书授权）· ffmpeg · edge-tts</span></div>
+    <h4 class="mini">流程架构</h4>
+    <div class="steps">
+      <div class="step"><b>check</b>环境 + 飞书授权只读探测</div><span class="arrow">→</span>
+      <div class="step"><b>ingest</b>飞书文档 → 文字 + UI 图片 → scenes.json 分镜</div><span class="arrow">→</span>
+      <div class="step"><b>voiceover</b>Edge TTS 配音 mp3 + vtt 字幕</div><span class="arrow">→</span>
+      <div class="step"><b>enhance</b>操作聚焦 + 光标 + 字幕渲染场景片段</div><span class="arrow">→</span>
+      <div class="step"><b>assemble</b>片头 + 场景 + 片尾 + BGM → MP4</div>
+    </div>
+    <div class="io">
+      <div class="box in"><h4>📥 输入物</h4>飞书文档链接（wiki / docx，推荐直接用已发布的产品使用手册）；线上 URL 源为 Phase 2 待实现</div>
+      <div class="box out"><h4>📤 输出物</h4>1920×1080 MP4 演示视频（配音 + 字幕 + 动效 + 片头片尾 + BGM），可再由 Release-Notifier 随发布通知分发</div>
+    </div>
+  </div>
+</details>
+
+<!-- 8 Release-Notifier -->
+<details class="skill">
+  <summary>
+    <div class="s-icon" style="background:#e8ebf2">📢</div>
+    <div class="s-title"><h3>LD-Release-Notifier · 发布通知器</h3><div class="en">TAPD Story → FEATURE 卡片 → 企微群 + 邮件联动</div></div>
+    <span class="s-ver">v1.5.1</span>
+  </summary>
+  <div class="s-body">
+    <p class="desc">链路终点：根据 TAPD 需求自动提炼 5 字段（实现方式 / 核心问题 / 业务场景 / 预期价值 / 亮点），渲染 FEATURE 卡片（Markdown 概要 + 自包含 HTML 附件，内嵌 Figma 设计稿截图 + AI 说明），通过企业智能机器人推送到企微群，并联动发送邮件（完整 HTML 正文 + 截图内嵌）。收件人与发件人均<b>一次性配置、永不重复询问</b>；SMTP 内置焦点科技服务器 <code>mail3.focuschina.com:465</code>，仅支持 leadong.com 企业邮箱，密码 = 邮箱登录密码。</p>
+    <div><span class="tag trig">发送发布通知</span><span class="tag trig">通知上线</span><span class="tag trig">发 FEATURE 卡片</span><span class="tag trig">群发需求</span><span class="tag dep">依赖：tapd · 企微机器人 · SMTP</span></div>
+    <h4 class="mini">流程步骤</h4>
+    <div class="steps">
+      <div class="step"><b>Step 0</b>收集 TAPD Story URL</div><span class="arrow">→</span>
+      <div class="step"><b class="gate">Step 1 硬门禁</b>check（TAPD / 机器人 / SMTP 状态）</div><span class="arrow">→</span>
+      <div class="step"><b>Step 2</b>获取 Story 详情 + 关联产物（只读字段 six/seven/eight）</div><span class="arrow">→</span>
+      <div class="step"><b>Step 3</b>AI 提炼 5 字段 → 展示预览 → 用户确认</div><span class="arrow">→</span>
+      <div class="step"><b>Step 3.5</b>有设计稿时筛选重要截图</div><span class="arrow">→</span>
+      <div class="step"><b>Step 4</b>渲染双格式（Markdown + 自包含 HTML）</div><span class="arrow">→</span>
+      <div class="step"><b>Step 5</b>机器人推送企微群</div><span class="arrow">→</span>
+      <div class="step"><b>Step 6</b>自动带默认收件人发邮件（--no-email 关闭 / --email-only 只发邮件）</div>
+    </div>
+    <div class="io">
+      <div class="box in"><h4>📥 输入物</h4>TAPD Story URL；首次配置：机器人 Bot ID / Secret / chat-id，默认收件人，发件邮箱 + 登录密码（均一次配置）</div>
+      <div class="box out"><h4>📤 输出物</h4>企微群 FEATURE 卡片（markdown + HTML 附件）；联动邮件（完整 HTML + 截图 CID 内嵌）；本地 features.json / html 产物</div>
+    </div>
+  </div>
+</details>
+
+<!-- ============ 5 快速上手 ============ -->
+<h2 class="sec"><span class="num">5</span>新人快速上手</h2>
+<p class="sec-sub">按顺序完成 4 步，即可跑通整条 PM 工作流。</p>
+
+<div class="card">
+  <ol class="start-list">
+    <li><b>配置凭证（仅一次）</b><br>对助手说「配置 TAPD 令牌」，按提示提供 TAPD 个人访问令牌；飞书授权在首次发布时扫码完成。所有凭证写入统一凭证中心，之后 8 个 Skill 全部免配置。</li>
+    <li><b>录入需求 → 写 PRD → 审查 → 发布</b><br>「根据这份 Word 录入需求」→ 编写 PRD Markdown → 「审查 PRD」拿到思考完成度报告并补强 → 「发布 PRD」发布到飞书并自动关联 TAPD。</li>
+    <li><b>原型部署与设计关联</b><br>前端出原型后「部署原型目录」，得到永久 pages.dev 域名自动写回 TAPD；设计师出稿后「关联 Figma + 需求链接」，设计字段与关联行同步更新。</li>
+    <li><b>上线后：手册 → 视频 → 通知</b><br>「发布手册」（按 Story 逐功能更新产品手册）→「生成演示视频」（基于手册文档）→「发送发布通知」（FEATURE 卡片推企微群 + 自动发邮件）。上线即完成从需求到通知的全闭环。</li>
+  </ol>
+</div>
+
+<footer>PM-Workflow · 全栈产品助手 × LD Skill 家族 · 生成于 2026-09-04 · 凭证与知识库配置详情见各 Skill SKILL.md</footer>
+</div>
+</body>
+</html>
